@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+    <div>投稿</div>
+    <div><input id="txt" type="text" /><button id="btn">投稿</button></div>
+  </div>
+  <ol id="list"></ol>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+  <script>
+    (function scope() {
+      var text = document.getElementById('txt');
+      var button = document.getElementById('btn');
+      var list = document.getElementById('list');
+
+      var socket = io('localhost:3000');
+      socket.on('connect', function () {
+        socket.on('posted:project/1', function (data) {
+          var msg = data.peyload.msg;
+          var li = document.createElement('li');
+          li.innerHTML = msg;
+          list.appendChild(li);
+        });
+      });
+
+      button.addEventListener('click', function () {
+        socket.emit('posting', text.value);
+      });
+    })();
+  </script>
+</body>
+
+</html>
